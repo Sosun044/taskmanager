@@ -38,4 +38,13 @@ public class ReminderService {
             log.info("Hatırlatma e-postası gönderildi: {}", task.getTitle());
         }
     }
+
+    @Scheduled(cron = "0 0 9 * * ?") // Her gün sabah 9'da çalışır
+    public void sendReminders() {
+        List<Task> overdueTasks = taskRepository.findByDueDateBeforeAndIsCompletedFalse(LocalDateTime.now());
+        overdueTasks.forEach(task -> {
+            emailService.sendTaskReminder(task.getEmail(), task.getTitle(), task.getDueDate().toString());
+        });
+    }
+
 }

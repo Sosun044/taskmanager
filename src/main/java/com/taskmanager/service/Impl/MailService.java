@@ -28,7 +28,6 @@ public class MailService {
 
             mailSender.send(message);
             System.out.println("E-posta başarıyla gönderildi!");
-
         } catch (MessagingException e) {
             e.printStackTrace();
             System.err.println("E-posta gönderme hatası: " + e.getMessage());

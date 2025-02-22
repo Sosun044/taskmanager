@@ -1,10 +1,13 @@
 package com.taskmanager.controller.Impl;
 
+import com.taskmanager.controller.ITaskController;
 import com.taskmanager.dto.TaskDTO;
 import com.taskmanager.model.Task;
+import com.taskmanager.model.User;
+import com.taskmanager.repository.UserRepository;
 import com.taskmanager.service.ITaskService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +17,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tasks")
-public class TaskControllerImpl {
+@RequiredArgsConstructor
+public class TaskControllerImpl implements ITaskController {
 
-    @Autowired
-    private ITaskService taskService;
+    private final ITaskService taskService;
+    private final UserRepository userRepository; // Constructor injection (Lombok @RequiredArgsConstructor)
 
     @PostMapping("/create")
     public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskDTO taskDTO) {
@@ -59,10 +63,13 @@ public class TaskControllerImpl {
         return ResponseEntity.notFound().build();
     }
 
-    // ✅ DTO -> Entity dönüşümü
+    // DTO -> Entity dönüşümü
     private Task convertToEntity(TaskDTO dto) {
+        // Kullanıcıyı, DTO'daki userId ile çekiyoruz:
+        User user = userRepository.findById(dto.userId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         return Task.builder()
-                .id(dto.id())
+                .id(dto.id())  // Yeni görev oluşturulurken id genellikle null olur
                 .title(dto.title())
                 .description(dto.description())
                 .status(dto.status())
@@ -73,10 +80,11 @@ public class TaskControllerImpl {
                 .estimatedTime(dto.estimatedTime())
                 .isCompleted(dto.isCompleted() != null ? dto.isCompleted() : false)
                 .email(dto.email())
+                .user(user)
                 .build();
     }
 
-    // ✅ Entity -> DTO dönüşümü
+    // Entity -> DTO dönüşümü
     private TaskDTO convertToDTO(Task task) {
         return new TaskDTO(
                 task.getId(),
@@ -89,8 +97,8 @@ public class TaskControllerImpl {
                 task.getCategory(),
                 task.getEstimatedTime(),
                 task.getIsCompleted(),
-                task.getEmail()
-
+                task.getEmail(),
+                task.getUser().getId()
         );
     }
 }

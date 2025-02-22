@@ -18,9 +18,9 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public Task saveTask(Task task) {
-        taskRepository.save(task);
-        mailService.sendTaskReminder(task.getEmail(), task.getTitle(), task.getDueDate().toString());
-        return task;
+        Task saved = taskRepository.save(task);
+        mailService.sendTaskReminder(saved.getEmail(), saved.getTitle(), saved.getDueDate().toString());
+        return saved;
     }
 
     @Override

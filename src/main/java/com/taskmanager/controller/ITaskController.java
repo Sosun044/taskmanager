@@ -1,5 +1,6 @@
 package com.taskmanager.controller;
 
+import com.taskmanager.dto.TaskDTO;
 import com.taskmanager.model.Task;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +11,16 @@ import java.util.List;
 public interface ITaskController {
 
     @PostMapping("/create")
-    ResponseEntity<Task> createTask(@Valid @RequestBody Task task);
+    public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskDTO taskDTO);
 
     @GetMapping("/list/{id}")
-    ResponseEntity<Task> getTaskById(@PathVariable Long id);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id);
 
     @GetMapping("/list")
-    ResponseEntity<List<Task>> getAllTasks();
+    public ResponseEntity<List<TaskDTO>> getAllTasks();
 
     @PutMapping("/update/{id}")
-    ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO);
 
     @DeleteMapping("/delete/{id}")
     ResponseEntity<Void> deleteTask(@PathVariable Long id);

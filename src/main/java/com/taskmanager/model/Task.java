@@ -58,5 +58,8 @@ public class Task {
     }
     @Column(nullable = false)
     private String email;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false) // Foreign Key bağlantısı
+    private User user;
 
 }
