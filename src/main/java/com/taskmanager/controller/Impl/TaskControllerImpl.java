@@ -4,7 +4,7 @@ import com.taskmanager.controller.ITaskController;
 import com.taskmanager.dto.TaskDTO;
 import com.taskmanager.model.Task;
 import com.taskmanager.model.User;
-import com.taskmanager.repository.UserRepository;
+import com.taskmanager.repository.IUserRepository;
 import com.taskmanager.service.ITaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
 public class TaskControllerImpl implements ITaskController {
 
     private final ITaskService taskService;
-    private final UserRepository userRepository; // Constructor injection (Lombok @RequiredArgsConstructor)
+    private final IUserRepository userRepository; // Constructor injection (Lombok @RequiredArgsConstructor)
 
     @PostMapping("/create")
     public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskDTO taskDTO) {

@@ -1,5 +1,6 @@
 package com.taskmanager.service.Impl;
 
+import com.taskmanager.Exception.TaskNotFoundException;
 import com.taskmanager.model.Task;
 import com.taskmanager.repository.ITaskRepository;
 import com.taskmanager.service.ITaskService;
@@ -35,7 +36,7 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public Optional<Task> updateTask(Long id, Task task) {
-        return taskRepository.findById(id).map(existingTask -> {
+        return Optional.ofNullable(taskRepository.findById(id).map(existingTask -> {
             existingTask.setTitle(task.getTitle());
             existingTask.setDescription(task.getDescription());
             existingTask.setStatus(task.getStatus());
@@ -47,7 +48,7 @@ public class TaskServiceImpl implements ITaskService {
             existingTask.setIsCompleted(task.getIsCompleted());
             existingTask.setEmail(task.getEmail());
             return taskRepository.save(existingTask);
-        });
+        }).orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found")));
     }
 
     @Override

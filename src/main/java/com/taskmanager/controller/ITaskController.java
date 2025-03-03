@@ -1,7 +1,6 @@
 package com.taskmanager.controller;
 
 import com.taskmanager.dto.TaskDTO;
-import com.taskmanager.model.Task;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

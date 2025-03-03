@@ -3,7 +3,7 @@ package com.taskmanager.service.Impl;
 import com.taskmanager.dto.UserDTO;
 import com.taskmanager.mapper.UserMapper;
 import com.taskmanager.model.User;
-import com.taskmanager.repository.UserRepository;
+import com.taskmanager.repository.IUserRepository;
 import com.taskmanager.service.IUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
-    private final UserRepository userRepository;
+    private final IUserRepository userRepository;
     private final UserMapper userMapper;
 
     public UserDTO createUser(UserDTO userDTO) {
