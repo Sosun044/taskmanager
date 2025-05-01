@@ -1,6 +1,7 @@
 package com.taskmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.taskmanager.model.Role;
 import com.taskmanager.model.Task;
 import lombok.*;
 
@@ -16,9 +17,7 @@ public class UserDTO {
     private String email;
     private String name;
     private String password;
-    private com.taskmanager.model.Role role;
-    // Eğer görevleri göndermek istemiyorsan bu alanı kaldırabilirsin:
-    // private List<com.taskmanager.model.Task> tasks;
+    private Role role;
     @JsonIgnore
     private List<Task> tasks;
 

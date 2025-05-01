@@ -1,6 +1,8 @@
 package com.taskmanager.service.Impl;
 
 import com.taskmanager.Exception.TaskNotFoundException;
+import com.taskmanager.dto.TaskDTO;
+import com.taskmanager.mapper.TaskMapper;
 import com.taskmanager.model.Task;
 import com.taskmanager.repository.ITaskRepository;
 import com.taskmanager.service.ITaskService;
@@ -15,40 +17,53 @@ import java.util.Optional;
 public class TaskServiceImpl implements ITaskService {
 
     private final ITaskRepository taskRepository;
-    private final MailService mailService; // Bağımlılığı enjekte ettik
+    private final MailService mailService;
+    private final TaskMapper taskMapper;
 
     @Override
-    public Task saveTask(Task task) {
+    public TaskDTO saveTask(TaskDTO taskDTO) {
+        Task task = taskMapper.toEntity(taskDTO);
         Task saved = taskRepository.save(task);
         mailService.sendTaskReminder(saved.getEmail(), saved.getTitle(), saved.getDueDate().toString());
-        return saved;
+        return taskMapper.toDTO(saved);
     }
 
     @Override
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
+    public TaskDTO getTaskById(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found"));
+        return taskMapper.toDTO(task);
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskDTO> getAllTasks() {
+        return taskRepository.findAll().stream().map(taskMapper::toDTO).toList();
     }
 
     @Override
-    public Optional<Task> updateTask(Long id, Task task) {
-        return Optional.ofNullable(taskRepository.findById(id).map(existingTask -> {
-            existingTask.setTitle(task.getTitle());
-            existingTask.setDescription(task.getDescription());
-            existingTask.setStatus(task.getStatus());
-            existingTask.setPriority(task.getPriority());
-            existingTask.setDueDate(task.getDueDate());
-            existingTask.setAssignedTo(task.getAssignedTo());
-            existingTask.setCategory(task.getCategory());
-            existingTask.setEstimatedTime(task.getEstimatedTime());
-            existingTask.setIsCompleted(task.getIsCompleted());
-            existingTask.setEmail(task.getEmail());
-            return taskRepository.save(existingTask);
-        }).orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found")));
+    public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id=  " + id + " not found"));
+
+        existingTask.setTitle(taskDTO.getTitle());
+        existingTask.setDescription(taskDTO.getDescription());
+        existingTask.setStatus(taskDTO.getStatus());
+        existingTask.setPriority(taskDTO.getTaskPriority());
+        existingTask.setDueDate(taskDTO.getDueDate());
+        existingTask.setAssignedTo(taskDTO.getAssignedTo());
+        existingTask.setCategory(taskDTO.getCategory());
+        existingTask.setEstimatedTime(taskDTO.getEstimatedTime());
+        existingTask.setIsCompleted(taskDTO.getIsCompleted());
+        existingTask.setEmail(taskDTO.getEmail());
+
+        if (taskDTO.getUserId() != null) {
+            var user = new com.taskmanager.model.User();
+            user.setId(taskDTO.getUserId());
+            existingTask.setUser(user);
+        }
+
+        Task updated = taskRepository.save(existingTask);
+        return taskMapper.toDTO(updated);
     }
 
     @Override

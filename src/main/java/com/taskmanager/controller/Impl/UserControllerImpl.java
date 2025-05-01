@@ -33,7 +33,9 @@ public class UserControllerImpl implements IUserController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+
         return ResponseEntity.ok(userService.updateUser(id, userDTO).orElseThrow(() -> new RuntimeException("User not found")));
+
     }
 
     @DeleteMapping("/delete/{id}")

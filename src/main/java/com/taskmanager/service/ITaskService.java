@@ -1,5 +1,6 @@
 package com.taskmanager.service;
 
+import com.taskmanager.dto.TaskDTO;
 import com.taskmanager.model.Task;
 
 import java.util.List;
@@ -7,13 +8,13 @@ import java.util.Optional;
 
 public interface ITaskService {
 
-    Task saveTask(Task task);
+    TaskDTO saveTask(TaskDTO taskDTO);
 
-    Optional<Task> getTaskById(Long id);
+    TaskDTO getTaskById(Long id);
 
-    List<Task> getAllTasks();
+    List<TaskDTO> getAllTasks();
 
-    Optional<Task> updateTask(Long id, Task task);
+    TaskDTO updateTask(Long id, TaskDTO taskDTO);
 
     void deleteTask(Long id);
 }

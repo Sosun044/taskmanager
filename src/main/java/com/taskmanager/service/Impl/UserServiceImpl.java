@@ -7,6 +7,8 @@ import com.taskmanager.repository.IUserRepository;
 import com.taskmanager.service.IUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements IUserService {
 
     private final IUserRepository userRepository;
     private final UserMapper userMapper;
+
 
     public UserDTO createUser(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
@@ -40,17 +44,24 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
-        return userRepository.findById(id).map(existingUser -> {
-            existingUser.setName(userDTO.getName());
-            existingUser.setEmail(userDTO.getEmail());
-            existingUser.setPassword(userDTO.getPassword());
-            existingUser.setRole(userDTO.getRole());
-            // Eğer güncellenecek diğer alanlar varsa ekle
-            return userRepository.save(existingUser);
-        }).map(userMapper::toDTO);
+        try {
+            return userRepository.findById(id).map(existingUser -> {
+                existingUser.setName(userDTO.getName());
+                existingUser.setEmail(userDTO.getEmail());
+                existingUser.setPassword(userDTO.getPassword());
+                existingUser.setRole(userDTO.getRole());
 
+                // Log ekleyin
+                log.info("Updating user with id: " + id);
 
-}
+                return userRepository.save(existingUser);
+            }).map(userMapper::toDTO);
+        } catch (Exception e) {
+            log.error("Error during user update: " + e.getMessage());
+            throw new RuntimeException("Kullanıcı güncellenirken hata oluştu.");
+        }
+    }
+
 
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)

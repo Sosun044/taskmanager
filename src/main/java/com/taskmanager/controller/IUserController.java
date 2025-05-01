@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface IUserController {
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO);
-    public ResponseEntity<List<UserDTO>> getAllUsers();
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id);
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO);
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id);
+    ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO);
+    ResponseEntity<List<UserDTO>> getAllUsers();
+    ResponseEntity<UserDTO> getUserById(@PathVariable Long id);
+    ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO);
+    ResponseEntity<Void> deleteUser(@PathVariable Long id);
 
 
 }
