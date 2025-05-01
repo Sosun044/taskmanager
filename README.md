@@ -13,12 +13,19 @@ Bu proje, kullanıcıların görevlerini yönetmelerine, hatırlatmalar oluştur
 Bu API, bir görev yönetim sistemi sağlar. Kullanıcılar, görevlerini sisteme kaydedebilir, görevleri kategorilere ayırabilir ve görevler için bir tamamlanma durumu belirleyebilir. Görevlerin bitiş tarihleri geldiğinde, kullanıcıya hatırlatma e-postası gönderilir.
 
 Teknolojiler
+
 Java 17: Uygulama dili.
+
 Lombok : Getter , Setter ,Constructor için kısa yol 
+
 Spring Boot: API geliştirme framework'ü.
+
 H2 Database: Geliştirme ve test amacıyla kullanılan hafif veritabanı.
+
 Spring Data JPA: Veritabanı işlemleri için ORM kullanımı.
+
 JavaMailSender: E-posta gönderimi için kullanılan araç.
+
 postman ve swagger : test etmek için
 
 
