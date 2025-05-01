@@ -1,4 +1,5 @@
 # 📝 Kullanıcı Dostu Görev ve Hatırlatma Yönetim API'si  
+Full-Stack-TaskManagement pdf yüklemişim onu okuyarak  proje hakkında görüntülere ulaşıp detaylı bilgilere daha rahat ulaşılabilir 
 
 Bu proje, kullanıcıların görevlerini yönetmelerine, hatırlatmalar oluşturmalarına ve verimli bir şekilde çalışmalarına yardımcı olmak için geliştirilmiş bir **Spring Boot mikroservis tabanlı görev yönetim API'sidir**.
 
